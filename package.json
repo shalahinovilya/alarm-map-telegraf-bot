@@ -14,6 +14,7 @@
     "dotenv": "^16.0.1",
     "nodemon": "^2.0.16",
     "puppeteer": "^14.1.0",
+    "random-useragent": "^0.5.0",
     "telegraf": "^4.8.2"
   }
 }

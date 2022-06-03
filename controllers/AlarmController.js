@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import PuppeteerAPI from "../api/PuppeteerAPI.js";
+import {getRandom} from "random-useragent";
 
 class AlarmController extends PuppeteerAPI{
 
@@ -24,13 +25,12 @@ class AlarmController extends PuppeteerAPI{
 
                     const data = []
                     const li = await alerts[alert].children
-
-                    for (let alertData = 0; alertData < li.length; alertData++) {
+                    for (let alertData = 0; alertData < li.length - 1; alertData++) {
 
                         data.push(li[alertData].textContent)
 
                     }
-                    alertList.push(data)
+                    if (data.length) alertList.push(data)
                 }
                 return alertList
 
@@ -47,6 +47,8 @@ class AlarmController extends PuppeteerAPI{
     async getAlarmList() {
 
         const page = await super.newPage();
+
+        await page.setExtraHTTPHeaders({'user-agent': getRandom()})
 
         await page.goto(this.url, { waitUntil: 'networkidle2' })
 

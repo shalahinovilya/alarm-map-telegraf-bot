@@ -58,6 +58,7 @@ bot.command('alarm', async (ctx) => {
         lastAlarmTime = new Date().getTime()
 
         let alarmInfo = ''
+        let alarmCount = -1
 
         try {
 
@@ -65,9 +66,13 @@ bot.command('alarm', async (ctx) => {
 
             const alarms = await AlarmController.getAlarmList()
 
-            for (let alarmNum = 0; alarmNum< alarms.length; alarmNum++) {
+            if (alarms.length <= 1) return await ctx.tg.sendMessage(chatId, 'На даний момент відсутні активні повітряні тривоги')
+
+            for (let alarmNum = 0; alarmNum < alarms.length; alarmNum++) {
 
                 const currentAlarm = alarms[alarmNum]
+
+                if (!currentAlarm.length) continue
 
                 for (let dataNum = 0; dataNum < currentAlarm.length; dataNum++) {
 
@@ -77,10 +82,11 @@ bot.command('alarm', async (ctx) => {
                                 `<b>⏳${currentAlarm[dataNum]};</b>   `
 
                 }
+                alarmCount += 1
                 alarmInfo += `\n\n`
             }
 
-            alarmInfo += `<b>Усьго активних тривог: ${alarms.length - 1}</b>`
+            alarmInfo += `<b>Усьго активних тривог: ${alarmCount}</b>`
 
             await ctx.tg.deleteMessage(chatId, awaitMessage.message_id)
 
